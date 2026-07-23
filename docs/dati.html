@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Tutti i dati — Straccia Camicia</title>
+<link rel="stylesheet" href="css/style.css">
+<style>
+    h1.page-title { font-size: 32px; margin: 48px 0 8px; }
+    .page-subtitle { color: var(--cream-dim); max-width: 68ch; margin-bottom: 24px; }
+
+    section.data-section { margin-bottom: 56px; }
+    section.data-section h2 { font-size: 22px; margin-bottom: 6px; }
+    section.data-section .section-note { color: var(--cream-dim); font-size: 14px; max-width: 68ch; margin-bottom: 16px; }
+
+    .toolbar {
+        display: flex;
+        gap: 12px;
+        flex-wrap: wrap;
+        align-items: center;
+        margin-bottom: 10px;
+    }
+    .toolbar .spacer { flex: 1; }
+    .toolbar input[type="search"] {
+        font-family: var(--font-mono);
+        font-size: 13px;
+        padding: 8px 12px;
+        border-radius: 6px;
+        border: 1px solid var(--ink-soft);
+        min-width: 220px;
+    }
+    .copy-feedback {
+        font-size: 12px;
+        color: var(--brass-bright);
+        min-height: 16px;
+    }
+
+    .table-wrap {
+        overflow-x: auto;
+        border-radius: 10px;
+        border: 1px solid var(--paper-dim);
+        max-height: 560px;
+        overflow-y: auto;
+    }
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        background: var(--paper);
+        color: var(--ink);
+        font-size: 13px;
+    }
+    thead th {
+        position: sticky;
+        top: 0;
+        background: var(--paper-dim);
+        text-align: left;
+        padding: 10px 12px;
+        font-weight: 600;
+        cursor: pointer;
+        user-select: none;
+        white-space: nowrap;
+        z-index: 1;
+    }
+    thead th:hover { background: #d8ccae; }
+    thead th .arrow { font-size: 10px; opacity: 0.6; margin-left: 4px; }
+    tbody td {
+        padding: 7px 12px;
+        border-top: 1px solid var(--paper-dim);
+        font-family: var(--font-mono);
+        white-space: nowrap;
+    }
+    tbody tr:hover { background: rgba(0,0,0,0.03); }
+    td.seq { letter-spacing: 0.02em; }
+    td.num { text-align: right; }
+    td.group-badge span {
+        display: inline-block;
+        background: var(--brass);
+        color: var(--felt-deep);
+        font-family: var(--font-body);
+        font-weight: 600;
+        font-size: 11px;
+        padding: 2px 8px;
+        border-radius: 10px;
+    }
+    .row-copy-btn { font-size: 11px; padding: 3px 8px; border-radius: 5px; }
+    .count-readout { font-size: 13px; color: var(--cream-dim); margin-bottom: 10px; }
+</style>
+</head>
+<body>
+
+<header class="site-header">
+    <a href="index.html" class="brand">Straccia Camicia</a>
+    <nav>
+        <a href="index.html">Home</a>
+        <a href="cicli.html">I 15 cicli</a>
+        <a href="simulatore.html">Simulatore</a>
+        <a href="dati.html" class="active">Tutti i dati</a>
+        <a href="https://github.com/" target="_blank" rel="noopener">GitHub</a>
+    </nav>
+</header>
+
+<main>
+
+<h1 class="page-title">Tutti i dati</h1>
+<p class="page-subtitle">
+    Due elenchi completi, entrambi ordinabili, filtrabili, e pronti per il
+    copia-incolla o l'esportazione in un foglio di calcolo.
+</p>
+
+<section class="data-section" id="section-infinite">
+    <h2>Le 162 partite infinite</h2>
+    <p class="section-note">
+        Rank, sequenza (configurazione delle 40 carte), a quale dei 15 cicli
+        appartiene (ID del ciclo), lunghezza del ciclo in turni e in trick, e
+        lunghezza del transitorio prima di entrarvi.
+    </p>
+    <div class="toolbar">
+        <input type="search" class="filter-input" placeholder="Filtra per rank o sequenza…">
+        <div class="spacer"></div>
+        <button type="button" class="btn-copy-tsv">Copia tutto (TSV)</button>
+        <button type="button" class="btn-download-csv" data-filename="straccia_camicia_162_partite_infinite.csv">Scarica CSV</button>
+    </div>
+    <div class="copy-feedback"></div>
+    <p class="count-readout"></p>
+    <div class="table-wrap">
+        <table class="data-table">
+            <thead><tr id="head-infinite"></tr></thead>
+            <tbody></tbody>
+        </table>
+    </div>
+</section>
+
+<section class="data-section" id="section-long">
+    <h2>Le 70 partite finite lunghe (≥ 4500 turni)</h2>
+    <p class="section-note">
+        Falsi positivi dello screening iniziale: partite che terminano
+        naturalmente, ma solo dopo un numero di turni molto superiore alla
+        media. La più lunga arriva a 4663 turni prima che un giocatore
+        rimanga senza carte.
+    </p>
+    <div class="toolbar">
+        <input type="search" class="filter-input" placeholder="Filtra per rank o sequenza…">
+        <div class="spacer"></div>
+        <button type="button" class="btn-copy-tsv">Copia tutto (TSV)</button>
+        <button type="button" class="btn-download-csv" data-filename="straccia_camicia_70_partite_lunghe.csv">Scarica CSV</button>
+    </div>
+    <div class="copy-feedback"></div>
+    <p class="count-readout"></p>
+    <div class="table-wrap">
+        <table class="data-table">
+            <thead><tr id="head-long"></tr></thead>
+            <tbody></tbody>
+        </table>
+    </div>
+</section>
+
+</main>
+
+<footer class="site-footer">
+    Progetto di ricerca esaustiva su Straccia Camicia — codice e dati su
+    <a href="https://github.com/" target="_blank" rel="noopener">GitHub</a>.
+</footer>
+
+<script>
+const INFINITE_DATA = [{"rank":10250747427146,"sequence":"0000000203100000010020230203000100300010","group":1,"cycle_length_turns":546,"cycle_length_tricks":84,"transient_turns":20},{"rank":11646338373896,"sequence":"0000000302100000010020230203000100300010","group":1,"cycle_length_turns":546,"cycle_length_tricks":84,"transient_turns":20},{"rank":11751274905176,"sequence":"0000000303100000010020220203000100300010","group":1,"cycle_length_turns":546,"cycle_length_tricks":84,"transient_turns":20},{"rank":13099237281751,"sequence":"0000001002030203031000100300010020000200","group":1,"cycle_length_turns":546,"cycle_length_tricks":84,"transient_turns":0},{"rank":13216723650751,"sequence":"0000001003020203031000100300010020000200","group":1,"cycle_length_turns":546,"cycle_length_tricks":84,"transient_turns":0},{"rank":13226747758691,"sequence":"0000001003030202031000100300010020000200","group":1,"cycle_length_turns":546,"cycle_length_tricks":84,"transient_turns":0},{"rank":15961396107176,"sequence":"0000002031000000100320200203000100300010","group":1,"cycle_length_turns":546,"cycle_length_tricks":84,"transient_turns":19},{"rank":18057035903426,"sequence":"0000003021000000100320200203000100300010","group":1,"cycle_length_turns":546,"cycle_length_tricks":84,"transient_turns":19},{"rank":18211387882676,"sequence":"0000003031000000100220200203000100300010","group":1,"cycle_length_turns":546,"cycle_length_tricks":84,"transient_turns":19},{"rank":19325459755353,"sequence":"0000010000021000000031003100302020000302","group":1,"cycle_length_turns":546,"cycle_length_tricks":84,"transient_turns":10},{"rank":19380580928083,"sequence":"0000010000031000000031003100202020000302","group":1,"cycle_length_turns":546,"cycle_length_tricks":84,"transient_turns":10},{"rank":19380580928952,"sequence":"0000010000031000000031003100302020000202","group":1,"cycle_length_turns":546,"cycle_length_tricks":84,"transient_turns":10},{"rank":24564091764041,"sequence":"0000021000000100303002203000100300010020","group":1,"cycle_length_turns":546,"cycle_length_tricks":84,"transient_turns":13},{"rank":27868314960161,"sequence":"0000031000000100203002203000100300010020","group":1,"cycle_length_turns":546,"cycle_length_tricks":84,"transient_turns":13},{"rank":27868532558801,"sequence":"0000031000000100302002203000100300010020","group":1,"cycle_length_turns":546,"cycle_length_tricks":84,"transient_turns":13},{"rank":30783992698480,"sequence":"0000100203020303100001030001002000020000","group":1,"cycle_length_turns":546,"cycle_length_tricks":84,"transient_turns":10},{"rank":31036917097480,"sequence":"0000100302020303100001030001002000020000","group":1,"cycle_length_turns":546,"cycle_length_tricks":84,"transient_turns":10},{"rank":31057524984780,"sequence":"0000100303020203100001030001002000020000","group":1,"cycle_length_turns":546,"cycle_length_tricks":84,"transient_turns":10},{"rank":37074997238021,"sequence":"0000210000001003030202003000100300010020","group":1,"cycle_length_turns":546,"cycle_length_tricks":84,"transient_turns":12},{"rank":41893647485201,"sequence":"0000310000001002030202003000100300010020","group":1,"cycle_length_turns":546,"cycle_length_tricks":84,"transient_turns":12},{"rank":41893972797881,"sequence":"0000310000001003020202003000100300010020","group":1,"cycle_length_turns":546,"cycle_length_tricks":84,"transient_turns":12},{"rank":45961593371561,"sequence":"0001002000020000000100203020303100000310","group":1,"cycle_length_turns":546,"cycle_length_tricks":84,"transient_turns":8},{"rank":45961596164351,"sequence":"0001002000020000000100302020303100000310","group":1,"cycle_length_turns":546,"cycle_length_tricks":84,"transient_turns":8},{"rank":45961596540881,"sequence":"0001002000020000000100303020203100000310","group":1,"cycle_length_turns":546,"cycle_length_tricks":84,"transient_turns":8},{"rank":46374936088023,"sequence":"0001003000100200002000000010020302030310","group":1,"cycle_length_turns":546,"cycle_length_tricks":84,"transient_turns":8},{"rank":46374936093483,"sequence":"0001003000100200002000000010030202030310","group":1,"cycle_length_turns":546,"cycle_length_tricks":84,"transient_turns":8},{"rank":46374936094341,"sequence":"0001003000100200002000000010030302020310","group":1,"cycle_length_turns":546,"cycle_length_tricks":84,"transient_turns":8},{"rank":50561702149152,"sequence":"0002000000010000021003031000003100302020","group":1,"cycle_length_turns":546,"cycle_length_tricks":84,"transient_turns":11},{"rank":50562456247392,"sequence":"0002000000010000031002031000003100302020","group":1,"cycle_length_turns":546,"cycle_length_tricks":84,"transient_turns":11},{"rank":50562463018410,"sequence":"0002000000010000031003031000003100202020","group":1,"cycle_length_turns":546,"cycle_length_tricks":84,"transient_turns":11},{"rank":68277305259757,"sequence":"0010020302030310000013000100200002000000","group":1,"cycle_length_turns":546,"cycle_length_tricks":84,"transient_turns":6},{"rank":68792701959757,"sequence":"0010030202030310000013000100200002000000","group":1,"cycle_length_turns":546,"cycle_length_tricks":84,"transient_turns":6},{"rank":68832829765657,"sequence":"0010030302020310000013000100200002000000","group":1,"cycle_length_turns":546,"cycle_length_tricks":84,"transient_turns":6},{"rank":70552965893752,"sequence":"0010300010020000200000001002030203031000","group":1,"cycle_length_turns":546,"cycle_length_tricks":84,"transient_turns":11},{"rank":70552965911692,"sequence":"0010300010020000200000001003020203031000","group":1,"cycle_length_turns":546,"cycle_length_tricks":84,"transient_turns":11},{"rank":70552965914287,"sequence":"0010300010020000200000001003030202031000","group":1,"cycle_length_turns":546,"cycle_length_tricks":84,"transient_turns":11},{"rank":74705603509960,"sequence":"0020000001000002100030310000310030202000","group":1,"cycle_length_turns":546,"cycle_length_tricks":84,"transient_turns":18},{"rank":74707601239120,"sequence":"0020000001000003100020310000310030202000","group":1,"cycle_length_turns":546,"cycle_length_tricks":84,"transient_turns":18},{"rank":74707611944568,"sequence":"0020000001000003100030310000310020202000","group":1,"cycle_length_turns":546,"cycle_length_tricks":84,"transient_turns":18},{"rank":78468759318682,"sequence":"0020030001003000100200002100000010030302","group":1,"cycle_length_turns":546,"cycle_length_tricks":84,"transient_turns":13},{"rank":78468759408766,"sequence":"0020030001003000100200003100000010020302","group":1,"cycle_length_turns":546,"cycle_length_tricks":84,"transient_turns":13},{"rank":78468759408775,"sequence":"0020030001003000100200003100000010030202","group":1,"cycle_length_turns":546,"cycle_length_tricks":84,"transient_turns":13},{"rank":80719964875415,"sequence":"0020302030310000031000100200002000000010","group":1,"cycle_length_turns":546,"cycle_length_tricks":84,"transient_turns":0},{"rank":80799127395533,"sequence":"0020310000031003020200020000000100000310","group":1,"cycle_length_turns":546,"cycle_length_tricks":84,"transient_turns":12},{"rank":82602404220256,"sequence":"0022030001003000100200000210000001003030","group":1,"cycle_length_turns":546,"cycle_length_tricks":84,"transient_turns":14},{"rank":82602404230615,"sequence":"0022030001003000100200000310000001002030","group":1,"cycle_length_turns":546,"cycle_length_tricks":84,"transient_turns":14},{"rank":82602404230618,"sequence":"0022030001003000100200000310000001003020","group":1,"cycle_length_turns":546,"cycle_length_tricks":84,"transient_turns":14},{"rank":90016849133615,"sequence":"0030202030310000031000100200002000000010","group":1,"cycle_length_turns":546,"cycle_length_tricks":84,"transient_turns":0},{"rank":90672286479815,"sequence":"0030302020310000031000100200002000000010","group":1,"cycle_length_turns":546,"cycle_length_tricks":84,"transient_turns":0},{"rank":90725350423793,"sequence":"0030310000031002020200020000000100000310","group":1,"cycle_length_turns":546,"cycle_length_tricks":84,"transient_turns":12},{"rank":90725354385518,"sequence":"0030310000031003020200020000000100000210","group":1,"cycle_length_turns":546,"cycle_length_tricks":84,"transient_turns":12},{"rank":91417829789819,"sequence":"0031003100202020000320000100000310000000","group":1,"cycle_length_turns":546,"cycle_length_tricks":84,"transient_turns":12},{"rank":91418049556799,"sequence":"0031003100302020000220000100000310000000","group":1,"cycle_length_turns":546,"cycle_length_tricks":84,"transient_turns":12},{"rank":91418049588776,"sequence":"0031003100302020000320000100000210000000","group":1,"cycle_length_turns":546,"cycle_length_tricks":84,"transient_turns":12},{"rank":95515848331474,"sequence":"0100000200000001000020203031000003100302","group":1,"cycle_length_turns":546,"cycle_length_tricks":84,"transient_turns":8},{"rank":95515884910744,"sequence":"0100000200000001000030202031000003100302","group":1,"cycle_length_turns":546,"cycle_length_tricks":84,"transient_turns":8},{"rank":95515885301161,"sequence":"0100000200000001000030203031000003100202","group":1,"cycle_length_turns":546,"cycle_length_tricks":84,"transient_turns":8},{"rank":105094392056848,"sequence":"0120000200000001000020020303100000310030","group":1,"cycle_length_turns":546,"cycle_length_tricks":84,"transient_turns":9},{"rank":105094398954193,"sequence":"0120000200000001000030020203100000310030","group":1,"cycle_length_turns":546,"cycle_length_tricks":84,"transient_turns":9},{"rank":105094398999023,"sequence":"0120000200000001000030020303100000310020","group":1,"cycle_length_turns":546,"cycle_length_tricks":84,"transient_turns":9},{"rank":106658499216597,"sequence":"0130001002000020000000100203020303100000","group":1,"cycle_length_turns":546,"cycle_length_tricks":84,"transient_turns":7},{"rank":106658499263567,"sequence":"0130001002000020000000100302020303100000","group":1,"cycle_length_turns":546,"cycle_length_tricks":84,"transient_turns":7},{"rank":106658499269703,"sequence":"0130001002000020000000100303020203100000","group":1,"cycle_length_turns":546,"cycle_length_tricks":84,"transient_turns":7},{"rank":116075579210471,"sequence":"0202002030001003000100000020310000001003","group":1,"cycle_length_turns":546,"cycle_length_tricks":84,"transient_turns":20},{"rank":116075579217236,"sequence":"0202002030001003000100000030210000001003","group":1,"cycle_length_turns":546,"cycle_length_tricks":84,"transient_turns":20},{"rank":116075579217731,"sequence":"0202002030001003000100000030310000001002","group":1,"cycle_length_turns":546,"cycle_length_tricks":84,"transient_turns":20},{"rank":116415376205323,"sequence":"0202202030001003000100000003031000000100","group":1,"cycle_length_turns":546,"cycle_length_tricks":84,"transient_turns":21},{"rank":116490137494283,"sequence":"0202302030001003000100000002031000000100","group":1,"cycle_length_turns":546,"cycle_length_tricks":84,"transient_turns":21},{"rank":116490137494943,"sequence":"0202302030001003000100000003021000000100","group":1,"cycle_length_turns":546,"cycle_length_tricks":84,"transient_turns":21},{"rank":117324171726559,"sequence":"0203100003100302020000200000010000031000","group":1,"cycle_length_turns":546,"cycle_length_tricks":84,"transient_turns":19},{"rank":131288555076259,"sequence":"0303100003100202020000200000010000031000","group":1,"cycle_length_turns":546,"cycle_length_tricks":84,"transient_turns":19},{"rank":131288561594159,"sequence":"0303100003100302020000200000010000021000","group":1,"cycle_length_turns":546,"cycle_length_tricks":84,"transient_turns":19},{"rank":136538325667598,"sequence":"1000000010020302030300001003000100200002","group":1,"cycle_length_turns":546,"cycle_length_tricks":84,"transient_turns":11},{"rank":136546372206098,"sequence":"1000000010030202030300001003000100200002","group":1,"cycle_length_turns":546,"cycle_length_tricks":84,"transient_turns":11},{"rank":136547127523738,"sequence":"1000000010030302020300001003000100200002","group":1,"cycle_length_turns":546,"cycle_length_tricks":84,"transient_turns":11},{"rank":158241762175249,"sequence":"2000010000021000000003100310030202000030","group":1,"cycle_length_turns":546,"cycle_length_tricks":84,"transient_turns":11},{"rank":158252443923599,"sequence":"2000010000031000000003100310020202000030","group":1,"cycle_length_turns":546,"cycle_length_tricks":84,"transient_turns":11},{"rank":158252443923832,"sequence":"2000010000031000000003100310030202000020","group":1,"cycle_length_turns":546,"cycle_length_tricks":84,"transient_turns":11},{"rank":163434277436841,"sequence":"2002030310000031003012000020000000100000","group":1,"cycle_length_turns":546,"cycle_length_tricks":84,"transient_turns":8},{"rank":166982306811891,"sequence":"2020303100000310030210000020000000100000","group":1,"cycle_length_turns":546,"cycle_length_tricks":84,"transient_turns":7},{"rank":168434191015749,"sequence":"2031000310030202000002000001000003100000","group":1,"cycle_length_turns":546,"cycle_length_tricks":84,"transient_turns":15},{"rank":172835311605857,"sequence":"2300010030001002000000100000010020302030","group":1,"cycle_length_turns":546,"cycle_length_tricks":84,"transient_turns":6},{"rank":172835311605952,"sequence":"2300010030001002000000100000010030202030","group":1,"cycle_length_turns":546,"cycle_length_tricks":84,"transient_turns":6},{"rank":172835311605969,"sequence":"2300010030001002000000100000010030302020","group":1,"cycle_length_turns":546,"cycle_length_tricks":84,"transient_turns":6},{"rank":182919394528281,"sequence":"3002020310000031003012000020000000100000","group":1,"cycle_length_turns":546,"cycle_length_tricks":84,"transient_turns":8},{"rank":182985806378821,"sequence":"3002030310000031002012000020000000100000","group":1,"cycle_length_turns":546,"cycle_length_tricks":84,"transient_turns":8},{"rank":186518684919291,"sequence":"3020203100000310030210000020000000100000","group":1,"cycle_length_turns":546,"cycle_length_tricks":84,"transient_turns":7},{"rank":186608060828851,"sequence":"3020303100000310020210000020000000100000","group":1,"cycle_length_turns":546,"cycle_length_tricks":84,"transient_turns":7},{"rank":187875857333949,"sequence":"3031000310020202000002000001000003100000","group":1,"cycle_length_turns":546,"cycle_length_tricks":84,"transient_turns":15},{"rank":187875867635403,"sequence":"3031000310030202000002000001000002100000","group":1,"cycle_length_turns":546,"cycle_length_tricks":84,"transient_turns":15},{"rank":7940399193600,"sequence":"0000000100000202021010000300301002030300","group":2,"cycle_length_turns":156,"cycle_length_tricks":20,"transient_turns":3},{"rank":17813545265052,"sequence":"0000003010020202031000010000300002100300","group":2,"cycle_length_turns":156,"cycle_length_tricks":20,"transient_turns":9},{"rank":29421023104256,"sequence":"0000100000202021000000300301002030300010","group":2,"cycle_length_turns":156,"cycle_length_tricks":20,"transient_turns":9},{"rank":29784185892031,"sequence":"0000100003000021003000000030100202020310","group":2,"cycle_length_turns":156,"cycle_length_tricks":20,"transient_turns":10},{"rank":30762025340870,"sequence":"0000100202020310000310300002100300000000","group":2,"cycle_length_turns":156,"cycle_length_tricks":20,"transient_turns":9},{"rank":40945660966234,"sequence":"0000301002020203100000100030000210030000","group":2,"cycle_length_turns":156,"cycle_length_tricks":20,"transient_turns":15},{"rank":44592331932575,"sequence":"0001000020202100000003030100203030001000","group":2,"cycle_length_turns":156,"cycle_length_tricks":20,"transient_turns":12},{"rank":45381979646407,"sequence":"0001000300002100300000003010020202031000","group":2,"cycle_length_turns":156,"cycle_length_tricks":20,"transient_turns":16},{"rank":55471394743305,"sequence":"0002100300000000010002020203100003003010","group":2,"cycle_length_turns":156,"cycle_length_tricks":20,"transient_turns":10},{"rank":68279153137944,"sequence":"0010020303000100003002020210000000003010","group":2,"cycle_length_turns":156,"cycle_length_tricks":20,"transient_turns":6},{"rank":88564101084557,"sequence":"0030030100203030001000010000020202100000","group":2,"cycle_length_turns":156,"cycle_length_tricks":20,"transient_turns":8},{"rank":96907217057533,"sequence":"0100003003010020303000000001000002020210","group":2,"cycle_length_turns":156,"cycle_length_tricks":20,"transient_turns":4},{"rank":102858860715233,"sequence":"0103000021003000000000001002020203100003","group":2,"cycle_length_turns":156,"cycle_length_tricks":20,"transient_turns":10},{"rank":116222093838812,"sequence":"0202020310000300301000210030000000001000","group":2,"cycle_length_turns":156,"cycle_length_tricks":20,"transient_turns":9},{"rank":116222900837360,"sequence":"0202021000000000301001002030300010000300","group":2,"cycle_length_turns":156,"cycle_length_tricks":20,"transient_turns":5},{"rank":131130219147896,"sequence":"0303010020303000100000100002020210000000","group":2,"cycle_length_turns":156,"cycle_length_tricks":20,"transient_turns":11},{"rank":136147857569761,"sequence":"1000000001000002020200100003003010020303","group":2,"cycle_length_turns":156,"cycle_length_tricks":20,"transient_turns":7},{"rank":136902088682578,"sequence":"1000000030100202020300000100003000021003","group":2,"cycle_length_turns":156,"cycle_length_tricks":20,"transient_turns":13},{"rank":138322647997829,"sequence":"1000002100300000000001002020203100003003","group":2,"cycle_length_turns":156,"cycle_length_tricks":20,"transient_turns":5},{"rank":142050001698370,"sequence":"1000300301002030300000000100000202021000","group":2,"cycle_length_turns":156,"cycle_length_tricks":20,"transient_turns":12},{"rank":143907859296764,"sequence":"1002020203100003003000002100300000000010","group":2,"cycle_length_turns":156,"cycle_length_tricks":20,"transient_turns":2},{"rank":143907930872313,"sequence":"1002020210000000003000010020303000100003","group":2,"cycle_length_turns":156,"cycle_length_tricks":20,"transient_turns":9},{"rank":145040294063446,"sequence":"1003030001000030000202100000000030100202","group":2,"cycle_length_turns":156,"cycle_length_tricks":20,"transient_turns":8},{"rank":152313301856473,"sequence":"1203030001000030000200210000000003010020","group":2,"cycle_length_turns":156,"cycle_length_tricks":20,"transient_turns":9},{"rank":153369523776730,"sequence":"1300002100300000000000100202020310000300","group":2,"cycle_length_turns":156,"cycle_length_tricks":20,"transient_turns":6},{"rank":168801834207152,"sequence":"2100000000001000002002031000030030100203","group":2,"cycle_length_turns":156,"cycle_length_tricks":20,"transient_turns":10},{"rank":168844060699379,"sequence":"2100000000030100202003030001000030000210","group":2,"cycle_length_turns":156,"cycle_length_tricks":20,"transient_turns":5},{"rank":170550446934739,"sequence":"2130000000001000002002003100003003010020","group":2,"cycle_length_turns":156,"cycle_length_tricks":20,"transient_turns":11},{"rank":30371472119751,"sequence":"0000100032002001000132020000000010030003","group":3,"cycle_length_turns":188,"cycle_length_tricks":36,"transient_turns":8},{"rank":34815828446567,"sequence":"0000200010203100303000200000021000013000","group":3,"cycle_length_turns":188,"cycle_length_tricks":36,"transient_turns":10},{"rank":35559939395206,"sequence":"0000200200100012100320000001003000303000","group":3,"cycle_length_turns":188,"cycle_length_tricks":36,"transient_turns":10},{"rank":46367269212574,"sequence":"0001003000030300002000200100001210030002","group":3,"cycle_length_turns":188,"cycle_length_tricks":36,"transient_turns":21},{"rank":50640389927231,"sequence":"0002000000021000013000002000100203100303","group":3,"cycle_length_turns":188,"cycle_length_tricks":36,"transient_turns":26},{"rank":52029344552935,"sequence":"0002000120310030300002000000100001300002","group":3,"cycle_length_turns":188,"cycle_length_tricks":36,"transient_turns":19},{"rank":61423612374121,"sequence":"0003020200000000100303000110003200200100","group":3,"cycle_length_turns":188,"cycle_length_tricks":36,"transient_turns":14},{"rank":68636926405487,"sequence":"0010030003030000200002001000121003000200","group":3,"cycle_length_turns":188,"cycle_length_tricks":36,"transient_turns":6},{"rank":74885831891039,"sequence":"0020000002100001300000020001020310030300","group":3,"cycle_length_turns":188,"cycle_length_tricks":36,"transient_turns":9},{"rank":77462800738747,"sequence":"0020010000121003000200100300003030000200","group":3,"cycle_length_turns":188,"cycle_length_tricks":36,"transient_turns":20},{"rank":92587424669913,"sequence":"0032020000000010030030001000320020010001","group":3,"cycle_length_turns":188,"cycle_length_tricks":36,"transient_turns":10},{"rank":93566194142308,"sequence":"0033030000200000021001000100300020001020","group":3,"cycle_length_turns":188,"cycle_length_tricks":36,"transient_turns":11},{"rank":97303075448771,"sequence":"0100010030002000102003303000020000002100","group":3,"cycle_length_turns":188,"cycle_length_tricks":36,"transient_turns":10},{"rank":100359821850644,"sequence":"0100300303000020000020010002100300020001","group":3,"cycle_length_turns":188,"cycle_length_tricks":36,"transient_turns":18},{"rank":108716078425501,"sequence":"0200000010000130000200200012031003030000","group":3,"cycle_length_turns":188,"cycle_length_tricks":36,"transient_turns":18},{"rank":108766146309792,"sequence":"0200000010030003030000002002001000121003","group":3,"cycle_length_turns":188,"cycle_length_tricks":36,"transient_turns":11},{"rank":112739177418880,"sequence":"0200100012100300020001003000303000020000","group":3,"cycle_length_turns":188,"cycle_length_tricks":36,"transient_turns":5},{"rank":125321716799680,"sequence":"0300011000320020010000302020000000010030","group":3,"cycle_length_turns":188,"cycle_length_tricks":36,"transient_turns":13},{"rank":130852616573635,"sequence":"0303000020000002100010000030002000102031","group":3,"cycle_length_turns":188,"cycle_length_tricks":36,"transient_turns":14},{"rank":138525324834443,"sequence":"1000003000200010203130300002000000210000","group":3,"cycle_length_turns":188,"cycle_length_tricks":36,"transient_turns":13},{"rank":157272730597392,"sequence":"2000001003000303000000200200100012100300","group":3,"cycle_length_turns":188,"cycle_length_tricks":36,"transient_turns":7},{"rank":160670585474026,"sequence":"2000200100012100300000000100300030300002","group":3,"cycle_length_turns":188,"cycle_length_tricks":36,"transient_turns":12},{"rank":162140211602063,"sequence":"2001000210030002000110030030300002000000","group":3,"cycle_length_turns":188,"cycle_length_tricks":36,"transient_turns":17},{"rank":176880337952724,"sequence":"3000002000000210000100030002000102031003","group":3,"cycle_length_turns":188,"cycle_length_tricks":36,"transient_turns":9},{"rank":179312526114033,"sequence":"3000100032002001000103202000000001003000","group":3,"cycle_length_turns":188,"cycle_length_tricks":36,"transient_turns":9},{"rank":192440806569261,"sequence":"3300002000000210000100003000200010203100","group":3,"cycle_length_turns":188,"cycle_length_tricks":36,"transient_turns":10},{"rank":649797222495,"sequence":"0000000000001003030000020201203020310010","group":4,"cycle_length_turns":233,"cycle_length_tricks":33,"transient_turns":23},{"rank":1137104982315,"sequence":"0000000000010030300200020201003020310010","group":4,"cycle_length_turns":233,"cycle_length_tricks":33,"transient_turns":22},{"rank":649797223081,"sequence":"0000000000001003030000020201203203010010","group":5,"cycle_length_turns":232,"cycle_length_tricks":33,"transient_turns":23},{"rank":1137104982901,"sequence":"0000000000010030300200020201003203010010","group":5,"cycle_length_turns":232,"cycle_length_tricks":33,"transient_turns":22},{"rank":649797222535,"sequence":"0000000000001003030000020201203023010010","group":6,"cycle_length_turns":232,"cycle_length_tricks":33,"transient_turns":23},{"rank":1137104982355,"sequence":"0000000000010030300200020201003023010010","group":6,"cycle_length_turns":232,"cycle_length_tricks":33,"transient_turns":22},{"rank":36508485943319,"sequence":"0000202010030203100100000000000100303002","group":7,"cycle_length_turns":233,"cycle_length_tricks":33,"transient_turns":23},{"rank":36518159479683,"sequence":"0000202012030203100100000000000010030300","group":7,"cycle_length_turns":233,"cycle_length_tricks":33,"transient_turns":24},{"rank":36508508187079,"sequence":"0000202010030230100100000000000100303002","group":8,"cycle_length_turns":232,"cycle_length_tricks":33,"transient_turns":23},{"rank":36518160436023,"sequence":"0000202012030230100100000000000010030300","group":8,"cycle_length_turns":232,"cycle_length_tricks":33,"transient_turns":24},{"rank":36508924903379,"sequence":"0000202010032030100100000000000100303002","group":9,"cycle_length_turns":232,"cycle_length_tricks":33,"transient_turns":23},{"rank":36518196615023,"sequence":"0000202012032030100100000000000010030300","group":9,"cycle_length_turns":232,"cycle_length_tricks":33,"transient_turns":24},{"rank":90556530320745,"sequence":"0030300201000000000030230100000202010010","group":10,"cycle_length_turns":232,"cycle_length_tricks":33,"transient_turns":18},{"rank":90556530072315,"sequence":"0030300201000000000030203100000202010010","group":11,"cycle_length_turns":233,"cycle_length_tricks":33,"transient_turns":18},{"rank":90556532424665,"sequence":"0030300201000000000032030100000202010010","group":12,"cycle_length_turns":232,"cycle_length_tricks":33,"transient_turns":18},{"rank":130372737293824,"sequence":"0302031000002020100100303002010000000000","group":13,"cycle_length_turns":233,"cycle_length_tricks":33,"transient_turns":19},{"rank":130646411808784,"sequence":"0302301000002020100100303002010000000000","group":14,"cycle_length_turns":232,"cycle_length_tricks":33,"transient_turns":19},{"rank":133977671771584,"sequence":"0320301000002020100100303002010000000000","group":15,"cycle_length_turns":232,"cycle_length_tricks":33,"transient_turns":19}];
+const LONG_DATA = [{"rank":106954227391669,"sequence":"0130023302200030010000000010000000000021","turns":4663,"tricks":757},{"rank":12300515440304,"sequence":"0000001000000000002113002330220003001000","turns":4662,"tricks":757},{"rank":183299039438555,"sequence":"3002330200300100001000001000000000001220","turns":4656,"tricks":755},{"rank":43411694869967,"sequence":"0001000000000002200100023302030010000103","turns":4653,"tricks":753},{"rank":57228650526117,"sequence":"0002330230010000103000100000000000200102","turns":4650,"tricks":753},{"rank":64253292445076,"sequence":"0010000000000020010200233023001000010300","turns":4649,"tricks":753},{"rank":30127652250051,"sequence":"0000100020130320000001000120030003000002","turns":4609,"tricks":746},{"rank":99111577645796,"sequence":"0100120030003000002000100020130320000000","turns":4606,"tricks":746},{"rank":66926217134502,"sequence":"0010002013032000000010012003000300000200","turns":4605,"tricks":746},{"rank":82166740449976,"sequence":"0022000001000000302003001001203010000030","turns":4601,"tricks":730},{"rank":105500421551547,"sequence":"0120030003000002000100020130320000000010","turns":4600,"tricks":744},{"rank":126731420467008,"sequence":"0300100120301000003002200000100000030200","turns":4600,"tricks":730},{"rank":54146744672226,"sequence":"0002013032000000001012003000300000200010","turns":4599,"tricks":744},{"rank":98252519178900,"sequence":"0100030003000002000100201303200000000102","turns":4599,"tricks":744},{"rank":79629482178816,"sequence":"0020130320000000010210003000300000200010","turns":4598,"tricks":744},{"rank":109223204489461,"sequence":"0200000100000030200030000120301000003021","turns":4597,"tricks":729},{"rank":178012984519135,"sequence":"3000012030100000302120000010000003020000","turns":4596,"tricks":729},{"rank":73755937579899,"sequence":"0013032000000001020203000300000200010010","turns":4593,"tricks":742},{"rank":158223389343291,"sequence":"2000010000003020000300012030100000302100","turns":4593,"tricks":729},{"rank":126068473894362,"sequence":"0300030000020001001001303200000000102020","turns":4592,"tricks":742},{"rank":102285236018089,"sequence":"0102030100000302100000001000000302000032","turns":4591,"tricks":728},{"rank":29285303265623,"sequence":"0000100000030200003210203010000030210000","turns":4590,"tricks":728},{"rank":152291881917119,"sequence":"1203010000030210000000100000030200003200","turns":4587,"tricks":728},{"rank":144879584700471,"sequence":"1003010000030210000001000000302000032002","turns":4586,"tricks":728},{"rank":154327219631488,"sequence":"1303200000010202000300030000000010010020","turns":4586,"tricks":741},{"rank":57408553408476,"sequence":"0003000000001001002030320000001020200031","turns":4585,"tricks":740},{"rank":137622903895326,"sequence":"1000000302000032002003010000030210000010","turns":4583,"tricks":727},{"rank":187966648427985,"sequence":"3032000001020200031000300000001001002000","turns":4582,"tricks":740},{"rank":184362933082040,"sequence":"3010000030210000010000000302000032002010","turns":4580,"tricks":726},{"rank":122646741370679,"sequence":"0300000010010020000000320000102020003103","turns":4579,"tricks":740},{"rank":92246060785248,"sequence":"0032000102020003103030000010010020000000","turns":4576,"tricks":740},{"rank":176594131614918,"sequence":"3000001001002000000003200010202000310300","turns":4575,"tricks":740},{"rank":12955091504093,"sequence":"0000001001002000000032000102020003103003","turns":4574,"tricks":740},{"rank":190958614560429,"sequence":"3200102020003103003000000001002000000001","turns":4571,"tricks":739},{"rank":20120937313626,"sequence":"0000010020000000010002010202000310300303","turns":4568,"tricks":738},{"rank":92734721829307,"sequence":"0032100000100300000102000320020100300000","turns":4566,"tricks":723},{"rank":112456414356570,"sequence":"0200032002010030000003210000010030000010","turns":4565,"tricks":723},{"rank":118503573531623,"sequence":"0210202000310300303000010020000000010000","turns":4565,"tricks":738},{"rank":45905943333237,"sequence":"0001002000000001000021020200031030030300","turns":4564,"tricks":738},{"rank":131683651042626,"sequence":"0310000010030000010020002002010030000023","turns":4562,"tricks":723},{"rank":160705906185300,"sequence":"2000200201003000002331000001003000001000","turns":4561,"tricks":723},{"rank":50463622159009,"sequence":"0002000000001000011002020003103003030002","turns":4559,"tricks":736},{"rank":20318678106296,"sequence":"0000010030000010002300020100300000231200","turns":4555,"tricks":721},{"rank":53856075049593,"sequence":"0002010030000023120000001003000001000230","turns":4554,"tricks":721},{"rank":31866270795676,"sequence":"0000103000001000230000200030000023120001","turns":4551,"tricks":720},{"rank":77028464962167,"sequence":"0020003000002312000100010300000100023000","turns":4550,"tricks":720},{"rank":49626444476549,"sequence":"0001300000100023000002003000002312000100","turns":4547,"tricks":720},{"rank":43784009314296,"sequence":"0001000000100023000002030000023120001003","turns":4546,"tricks":720},{"rank":113994014741375,"sequence":"0200300000231200010000130000010002300000","turns":4546,"tricks":720},{"rank":116687935417865,"sequence":"0203000002312000100300100000010002300000","turns":4545,"tricks":720},{"rank":44651635783324,"sequence":"0001000023000000020100000023120001003030","turns":4537,"tricks":718},{"rank":16708704473770,"sequence":"0000002312000100303000100002300000002010","turns":4536,"tricks":718},{"rank":67059876066361,"sequence":"0010002300000002010000002312000100303000","turns":4533,"tricks":718},{"rank":38444577686170,"sequence":"0000231200010030300001000230000000201000","turns":4532,"tricks":718},{"rank":99900704997220,"sequence":"0100230000000201000000231200010030300000","turns":4529,"tricks":718},{"rank":83744107922784,"sequence":"0023120001003030000010023000000020100000","turns":4528,"tricks":718},{"rank":132722429236175,"sequence":"0312000100303000000223000000020100000010","turns":4523,"tricks":717},{"rank":172399601439050,"sequence":"2300000002010000001031200010030300000020","turns":4522,"tricks":717},{"rank":86798179640602,"sequence":"0030002020200000000300000013001000103201","turns":4517,"tricks":728},{"rank":14345719687605,"sequence":"0000001300100010320103000202020000000030","turns":4516,"tricks":728},{"rank":151511093645548,"sequence":"1200013030000002023300000000100000010020","turns":4516,"tricks":717},{"rank":4920093722450,"sequence":"0000000010000001002020001303000000202331","turns":4515,"tricks":716},{"rank":151478781939182,"sequence":"1200010030000002023300000001000000100203","turns":4515,"tricks":717},{"rank":7877905804955,"sequence":"0000000100000010020320001003000000202331","turns":4514,"tricks":716},{"rank":127684240142213,"sequence":"0300202020000000030000001300100010320100","turns":4513,"tricks":728},{"rank":33374590267683,"sequence":"0000130010001032010030020202000000003000","turns":4512,"tricks":728},{"rank":80134549365618,"sequence":"0020220000000030000303001001032010001000","turns":4505,"tricks":726},{"rank":126725771973901,"sequence":"0300100103201000100002022000000003000030","turns":4504,"tricks":726},{"rank":115755648941635,"sequence":"0202000000003000030030010003201000100021","turns":4501,"tricks":725},{"rank":181549965279577,"sequence":"3001000320100010002120200000000300003000","turns":4500,"tricks":725}];
+
+function copyText(feedbackEl, text, message) {
+    navigator.clipboard.writeText(text).then(() => {
+        feedbackEl.textContent = message;
+        setTimeout(() => { feedbackEl.textContent = ''; }, 3000);
+    }).catch(() => {
+        feedbackEl.textContent = 'Copia non riuscita (permessi del browser). Seleziona e copia manualmente.';
+    });
+}
+
+// Istanzia una tabella interattiva (ordinabile, filtrabile, copiabile) dentro
+// la <section> indicata. columns = [{key, header, type}], data = array di oggetti.
+function initTable(sectionEl, headRowEl, columns, data, defaultSortKey, defaultSortAsc) {
+    const tbody = sectionEl.querySelector('tbody');
+    const filterInput = sectionEl.querySelector('.filter-input');
+    const countReadout = sectionEl.querySelector('.count-readout');
+    const copyFeedback = sectionEl.querySelector('.copy-feedback');
+    const btnCopy = sectionEl.querySelector('.btn-copy-tsv');
+    const btnDownload = sectionEl.querySelector('.btn-download-csv');
+
+    let sortKey = defaultSortKey;
+    let sortAsc = defaultSortAsc !== undefined ? defaultSortAsc : true;
+    let currentRows = data.slice();
+
+    headRowEl.innerHTML = columns.map(c =>
+        `<th data-key="${c.key}">${c.header}<span class="arrow"></span></th>`
+    ).join('') + '<th></th>';
+
+    function render() {
+        const filterVal = filterInput.value.trim();
+        let filtered = data;
+        if (filterVal) {
+            filtered = data.filter(r => String(r.rank).includes(filterVal) || r.sequence.includes(filterVal));
+        }
+
+        filtered = filtered.slice().sort((a, b) => {
+            const va = a[sortKey], vb = b[sortKey];
+            let cmp = (typeof va === 'number') ? va - vb : String(va).localeCompare(String(vb));
+            return sortAsc ? cmp : -cmp;
+        });
+
+        currentRows = filtered;
+        countReadout.textContent = `${filtered.length} righe mostrate (su ${data.length} totali)`;
+
+        tbody.innerHTML = '';
+        for (const r of filtered) {
+            const tr = document.createElement('tr');
+            tr.innerHTML = columns.map(c => {
+                const val = r[c.key];
+                const cls = c.key === 'sequence' ? 'seq' : (c.type === 'num' ? 'num' : (c.key === 'group' ? 'group-badge' : ''));
+                const content = c.key === 'group' ? `<span>${val}</span>` : val;
+                return `<td class="${cls}">${content}</td>`;
+            }).join('') + `<td><button type="button" class="row-copy-btn" data-rank="${r.rank}">Copia riga</button></td>`;
+            tbody.appendChild(tr);
+        }
+
+        tbody.querySelectorAll('.row-copy-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const rank = Number(btn.getAttribute('data-rank'));
+                const row = data.find(r => String(r.rank) === String(rank));
+                const line = columns.map(c => row[c.key]).join('\t');
+                copyText(copyFeedback, line, `Riga (rank ${rank}) copiata negli appunti.`);
+            });
+        });
+
+        headRowEl.querySelectorAll('th[data-key]').forEach(th => {
+            const arrow = th.querySelector('.arrow');
+            arrow.textContent = th.getAttribute('data-key') === sortKey ? (sortAsc ? '▲' : '▼') : '';
+        });
+    }
+
+    headRowEl.querySelectorAll('th[data-key]').forEach(th => {
+        th.addEventListener('click', () => {
+            const key = th.getAttribute('data-key');
+            if (sortKey === key) sortAsc = !sortAsc;
+            else { sortKey = key; sortAsc = true; }
+            render();
+        });
+    });
+
+    filterInput.addEventListener('input', render);
+
+    btnCopy.addEventListener('click', () => {
+        const lines = [columns.map(c => c.header).join('\t')];
+        for (const r of currentRows) lines.push(columns.map(c => r[c.key]).join('\t'));
+        copyText(copyFeedback, lines.join('\n'),
+            `${currentRows.length} righe copiate negli appunti (formato TSV, incollabile in Excel/Fogli Google).`);
+    });
+
+    btnDownload.addEventListener('click', () => {
+        const lines = [columns.map(c => c.header).join(',')];
+        for (const r of currentRows) lines.push(columns.map(c => r[c.key]).join(','));
+        const blob = new Blob([lines.join('\n')], { type: 'text/csv;charset=utf-8;' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = btnDownload.getAttribute('data-filename');
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+    });
+
+    render();
+}
+
+initTable(
+    document.getElementById('section-infinite'),
+    document.getElementById('head-infinite'),
+    [
+        { key: 'rank', header: 'rank', type: 'num' },
+        { key: 'sequence', header: 'sequenza (40 cifre)', type: 'str' },
+        { key: 'group', header: 'ID ciclo', type: 'num' },
+        { key: 'cycle_length_turns', header: 'lungh. ciclo (turni)', type: 'num' },
+        { key: 'cycle_length_tricks', header: 'lungh. ciclo (trick)', type: 'num' },
+        { key: 'transient_turns', header: 'transitorio (turni)', type: 'num' },
+    ],
+    INFINITE_DATA,
+    'group'
+);
+
+initTable(
+    document.getElementById('section-long'),
+    document.getElementById('head-long'),
+    [
+        { key: 'rank', header: 'rank', type: 'num' },
+        { key: 'sequence', header: 'sequenza (40 cifre)', type: 'str' },
+        { key: 'turns', header: 'turni', type: 'num' },
+        { key: 'tricks', header: 'trick', type: 'num' },
+    ],
+    LONG_DATA,
+    'turns',
+    false
+);
+</script>
+
+</body>
+</html>
