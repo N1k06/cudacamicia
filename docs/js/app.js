@@ -13,6 +13,8 @@ const simulateBtn = document.getElementById('simulate-btn');
 const simStatus = document.getElementById('sim-status');
 
 const resultPanel = document.getElementById('result-panel');
+const granularityRow = document.getElementById('granularity-row');
+const granularityToggle = document.getElementById('granularity-toggle');
 const outcomeBanner = document.getElementById('outcome-banner');
 const turnLabel = document.getElementById('turn-label');
 const handARow = document.getElementById('hand-a-row');
@@ -123,6 +125,7 @@ simulateBtn.addEventListener('click', () => {
 
     simStatus.textContent = 'Simulazione in corso…';
     stopPlayback();
+    granularityToggle.checked = true;
 
     // Lasciamo respirare l'interfaccia prima di un calcolo potenzialmente
     // pesante (partite fino a qualche migliaio di turni sono comunque
@@ -135,8 +138,19 @@ simulateBtn.addEventListener('click', () => {
     }, 10);
 });
 
+function activeHistory() {
+    return granularityToggle.checked ? currentResult.turnHistory : currentResult.history;
+}
+
+// Indice, nella cronologia attiva, del punto in cui inizia il ciclo (se presente)
+function cycleStartIndex() {
+    if (!currentResult || currentResult.kind !== 'cycle') return null;
+    return granularityToggle.checked ? currentResult.firstTurn : currentResult.firstIdx;
+}
+
 function showResult(result) {
     resultPanel.classList.add('visible');
+    granularityRow.style.display = '';
 
     if (result.kind === 'cycle') {
         outcomeBanner.className = 'outcome-banner cycle';
@@ -154,13 +168,24 @@ function showResult(result) {
         btnCycleStart.style.display = 'none';
     }
 
-    slider.max = String(result.history.length - 1);
+    const hist = activeHistory();
+    slider.max = String(hist.length - 1);
     slider.value = '0';
     renderState(0);
 }
 
+granularityToggle.addEventListener('change', () => {
+    if (!currentResult) return;
+    stopPlayback();
+    const hist = activeHistory();
+    slider.max = String(hist.length - 1);
+    slider.value = '0';
+    renderState(0);
+});
+
 function renderState(idx) {
-    const s = currentResult.history[idx];
+    const hist = activeHistory();
+    const s = hist[idx];
 
     turnLabel.textContent = `Turno ${s.turn}`;
     renderHand(handARow, s.handA);
@@ -171,14 +196,15 @@ function renderState(idx) {
     leaderABadge.style.display = s.leader === 0 ? '' : 'none';
     leaderBBadge.style.display = s.leader === 1 ? '' : 'none';
 
-    if (currentResult.kind === 'cycle' && idx === currentResult.firstIdx) {
+    const cycleIdx = cycleStartIndex();
+    if (cycleIdx !== null && idx === cycleIdx) {
         cycleMarker.style.display = '';
         cycleMarker.textContent = '★ Questo è lo stato che si ripeterà — inizio del ciclo.';
     } else {
         cycleMarker.style.display = 'none';
     }
 
-    positionReadout.textContent = `${idx} / ${currentResult.history.length - 1}`;
+    positionReadout.textContent = `${idx} / ${hist.length - 1}`;
     slider.value = String(idx);
 }
 
@@ -200,7 +226,7 @@ function stopPlayback() {
 }
 
 btnFirst.addEventListener('click', () => { stopPlayback(); renderState(0); });
-btnLast.addEventListener('click', () => { stopPlayback(); renderState(currentResult.history.length - 1); });
+btnLast.addEventListener('click', () => { stopPlayback(); renderState(activeHistory().length - 1); });
 btnPrev.addEventListener('click', () => {
     stopPlayback();
     const idx = Math.max(0, parseInt(slider.value, 10) - 1);
@@ -208,19 +234,20 @@ btnPrev.addEventListener('click', () => {
 });
 btnNext.addEventListener('click', () => {
     stopPlayback();
-    const idx = Math.min(currentResult.history.length - 1, parseInt(slider.value, 10) + 1);
+    const idx = Math.min(activeHistory().length - 1, parseInt(slider.value, 10) + 1);
     renderState(idx);
 });
 btnCycleStart.addEventListener('click', () => {
     stopPlayback();
-    if (currentResult && currentResult.kind === 'cycle') renderState(currentResult.firstIdx);
+    const idx = cycleStartIndex();
+    if (idx !== null) renderState(idx);
 });
 btnPlay.addEventListener('click', () => {
     if (playTimer) { stopPlayback(); return; }
     btnPlay.textContent = '⏸';
     playTimer = setInterval(() => {
         const idx = parseInt(slider.value, 10);
-        if (idx >= currentResult.history.length - 1) { stopPlayback(); return; }
+        if (idx >= activeHistory().length - 1) { stopPlayback(); return; }
         renderState(idx + 1);
     }, 120);
 });

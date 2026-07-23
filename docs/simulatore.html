@@ -137,6 +137,17 @@
         <button type="button" id="simulate-btn" class="primary">Simula</button>
         <span class="ink-soft" id="sim-status" style="font-size:13px;"></span>
     </div>
+
+    <div class="actions-row" id="granularity-row" style="display:none; margin-top: 4px; flex-direction: column; align-items: flex-start; gap: 4px;">
+        <label style="display:flex; align-items:center; gap:8px; margin:0; font-weight:400;">
+            <input type="checkbox" id="granularity-toggle" checked style="width:auto;">
+            Mostra ogni singola carta (non solo i round)
+        </label>
+        <span class="ink-soft" style="font-size:12px;">
+            Disattivato: un salto per round (la carta del leader + l'intera catena di risposte insieme).
+            Attivato: un salto per ogni singola carta, incluse quelle dentro una catena.
+        </span>
+    </div>
 </div>
 
 <div class="paper-panel result-panel" id="result-panel">

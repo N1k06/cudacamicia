@@ -14,15 +14,21 @@ function stateKey(handA, handB, pile, leader) {
     return handA.join(',') + '|' + handB.join(',') + '|' + pile.join(',') + '|' + leader;
 }
 
-// Esegue l'intera simulazione, conservando uno snapshot per ogni round
-// (prima di giocare la carta del leader di quel round).
+// Esegue l'intera simulazione, conservando DUE cronologie parallele:
+//   - history:      uno snapshot per ogni ROUND (la carta del leader + l'eventuale
+//                    intera catena di risposte, registrati come un unico salto)
+//   - turnHistory:  uno snapshot per ogni SINGOLA CARTA giocata, inclusa ciascuna
+//                    carta dentro una catena di risposte -- utile per capire nel
+//                    dettaglio catene lunghe con piu' scambi di ruolo
+//
+// In entrambe, il campo 'leader' indica chi sta per giocare in quello
+// specifico snapshot (per i round e' chi guida il round; per i singoli
+// turni puo' cambiare piu' volte all'interno di una stessa catena).
 //
 // Ritorna:
-//   { kind: 'cycle', firstTurn, curTurn, cycleLengthTurns, firstIdx, history }
-//   { kind: 'terminated', turn, history }
-//   { kind: 'inconclusive', turn, history }
-//
-// history[i] = { turn, handA, handB, pile, leader }  (snapshot ANTE il round i)
+//   { kind: 'cycle', firstTurn, curTurn, cycleLengthTurns, firstIdx, history, turnHistory }
+//   { kind: 'terminated', turn, history, turnHistory }
+//   { kind: 'inconclusive', turn, history, turnHistory }
 function simulateFull(dealA, dealB, maxTurns = 2000000) {
     let hands = [dealA.slice(), dealB.slice()];
     let pile = [];
@@ -30,6 +36,17 @@ function simulateFull(dealA, dealB, maxTurns = 2000000) {
     let turn = 0;
     const seen = new Map();
     const history = [];
+    const turnHistory = [];
+
+    function snapshot(arr, activePlayer) {
+        arr.push({
+            turn: turn,
+            handA: hands[0].slice(),
+            handB: hands[1].slice(),
+            pile: pile.slice(),
+            leader: activePlayer,
+        });
+    }
 
     while (hands[0].length > 0 && hands[1].length > 0 && turn < maxTurns) {
         const key = stateKey(hands[0], hands[1], pile, leader);
@@ -42,29 +59,24 @@ function simulateFull(dealA, dealB, maxTurns = 2000000) {
                 cycleLengthTurns: turn - history[firstIdx].turn,
                 firstIdx: firstIdx,
                 history: history,
+                turnHistory: turnHistory,
             };
         }
         seen.set(key, history.length);
-        history.push({
-            turn: turn,
-            handA: hands[0].slice(),
-            handB: hands[1].slice(),
-            pile: pile.slice(),
-            leader: leader,
-        });
+        snapshot(history, leader);
 
         let attacker = leader, defender = 1 - leader;
+
+        snapshot(turnHistory, attacker);  // prima che il leader giochi la sua carta
         const v = hands[attacker].shift();
         pile.push(v);
         turn++;
 
         if (hands[defender].length === 0) {
             while (pile.length > 0) hands[attacker].push(pile.shift());
-            history.push({
-                turn: turn, handA: hands[0].slice(), handB: hands[1].slice(),
-                pile: pile.slice(), leader: attacker,
-            });
-            return { kind: 'terminated', turn: turn, history: history };
+            snapshot(history, attacker);
+            snapshot(turnHistory, attacker);
+            return { kind: 'terminated', turn: turn, history: history, turnHistory: turnHistory };
         }
 
         if (v === 0) {
@@ -75,6 +87,7 @@ function simulateFull(dealA, dealB, maxTurns = 2000000) {
         let pending = v;
         while (pending > 0) {
             if (hands[defender].length === 0) break;
+            snapshot(turnHistory, defender);  // prima che il difensore risponda con questa carta
             const rv = hands[defender].shift();
             pile.push(rv);
             turn++;
@@ -87,11 +100,9 @@ function simulateFull(dealA, dealB, maxTurns = 2000000) {
 
         if (hands[defender].length === 0) {
             while (pile.length > 0) hands[attacker].push(pile.shift());
-            history.push({
-                turn: turn, handA: hands[0].slice(), handB: hands[1].slice(),
-                pile: pile.slice(), leader: attacker,
-            });
-            return { kind: 'terminated', turn: turn, history: history };
+            snapshot(history, attacker);
+            snapshot(turnHistory, attacker);
+            return { kind: 'terminated', turn: turn, history: history, turnHistory: turnHistory };
         }
 
         while (pile.length > 0) {
@@ -101,9 +112,9 @@ function simulateFull(dealA, dealB, maxTurns = 2000000) {
     }
 
     if (hands[0].length === 0 || hands[1].length === 0) {
-        return { kind: 'terminated', turn: turn, history: history };
+        return { kind: 'terminated', turn: turn, history: history, turnHistory: turnHistory };
     }
-    return { kind: 'inconclusive', turn: turn, history: history };
+    return { kind: 'inconclusive', turn: turn, history: history, turnHistory: turnHistory };
 }
 
 if (typeof module !== 'undefined') {
