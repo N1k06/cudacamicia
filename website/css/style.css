@@ -1,0 +1,202 @@
+/* style.css — sistema di design condiviso per il sito Straccia Camicia */
+
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap');
+
+:root {
+    --felt: #1b3a2f;
+    --felt-deep: #142c23;
+    --paper: #f0e6d2;
+    --paper-dim: #e4d8bd;
+    --ink: #2a2118;
+    --ink-soft: #55493a;
+    --brass: #b08d4f;
+    --brass-bright: #c9a765;
+    --burgundy: #7a2e2e;
+    --burgundy-bright: #9c4646;
+    --cream: #ede6d6;
+    --cream-dim: #b9b0a0;
+
+    --font-display: 'Fraunces', Georgia, serif;
+    --font-body: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    --font-mono: 'JetBrains Mono', Consolas, monospace;
+
+    /* colori dei valori di carta (elemento firma del sito) */
+    --card-0: #6b6255;
+    --card-1: #4f7d6b;
+    --card-2: #b08d4f;
+    --card-3: #7a2e2e;
+}
+
+* { box-sizing: border-box; }
+
+html { scroll-behavior: smooth; }
+
+body {
+    margin: 0;
+    background: var(--felt);
+    color: var(--cream);
+    font-family: var(--font-body);
+    line-height: 1.6;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    * { animation-duration: 0.001ms !important; transition-duration: 0.001ms !important; }
+}
+
+a { color: var(--brass-bright); }
+a:hover { color: var(--cream); }
+
+h1, h2, h3 {
+    font-family: var(--font-display);
+    font-weight: 500;
+    letter-spacing: -0.01em;
+    margin: 0;
+}
+
+.mono { font-family: var(--font-mono); }
+
+/* --- Struttura di pagina --- */
+
+.site-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px 32px;
+    border-bottom: 1px solid rgba(240, 230, 210, 0.12);
+}
+
+.site-header .brand {
+    font-family: var(--font-display);
+    font-size: 19px;
+    font-weight: 600;
+    color: var(--cream);
+    text-decoration: none;
+}
+
+.site-header nav {
+    display: flex;
+    gap: 28px;
+}
+
+.site-header nav a {
+    font-size: 14px;
+    text-decoration: none;
+    color: var(--cream-dim);
+    border-bottom: 1px solid transparent;
+    padding-bottom: 2px;
+    transition: color 0.15s, border-color 0.15s;
+}
+
+.site-header nav a:hover,
+.site-header nav a.active {
+    color: var(--brass-bright);
+    border-bottom-color: var(--brass-bright);
+}
+
+main { max-width: 1040px; margin: 0 auto; padding: 0 32px 80px; }
+
+.site-footer {
+    text-align: center;
+    padding: 32px;
+    font-size: 13px;
+    color: var(--cream-dim);
+    border-top: 1px solid rgba(240, 230, 210, 0.12);
+    margin-top: 60px;
+}
+.site-footer a { color: var(--cream-dim); }
+
+/* --- Pannelli in stile "carta" --- */
+
+.paper-panel {
+    background: var(--paper);
+    color: var(--ink);
+    border-radius: 10px;
+    border: 1px solid var(--paper-dim);
+    padding: 28px;
+}
+
+.paper-panel h2, .paper-panel h3 { color: var(--ink); }
+.paper-panel .ink-soft { color: var(--ink-soft); }
+.paper-panel a { color: var(--burgundy); }
+.paper-panel a:hover { color: var(--ink); }
+
+/* --- Focus da tastiera visibile, ovunque --- */
+:focus-visible {
+    outline: 2px solid var(--brass-bright);
+    outline-offset: 2px;
+}
+
+/* --- Bottoni --- */
+
+button, .btn {
+    font-family: var(--font-body);
+    font-size: 14px;
+    font-weight: 500;
+    padding: 10px 20px;
+    border-radius: 7px;
+    border: 1px solid var(--brass);
+    background: transparent;
+    color: var(--brass-bright);
+    cursor: pointer;
+    transition: background 0.15s, color 0.15s;
+}
+button:hover, .btn:hover { background: var(--brass); color: var(--felt-deep); }
+button:disabled { opacity: 0.4; cursor: not-allowed; }
+
+button.primary, .btn.primary {
+    background: var(--brass);
+    color: var(--felt-deep);
+}
+button.primary:hover { background: var(--brass-bright); }
+
+/* --- Chip carta (elemento firma): ogni valore 0-3 diventa un piccolo
+   simbolo colorato e distinto, mai una cifra nuda --- */
+
+.card-chip {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 22px;
+    height: 28px;
+    border-radius: 4px;
+    font-family: var(--font-mono);
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--cream);
+    margin: 1.5px;
+    flex-shrink: 0;
+}
+.card-chip[data-v="0"] { background: var(--card-0); }
+.card-chip[data-v="1"] { background: var(--card-1); }
+.card-chip[data-v="2"] { background: var(--card-2); }
+.card-chip[data-v="3"] { background: var(--card-3); }
+
+.hand-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0;
+    align-items: center;
+}
+
+/* --- Input testuali --- */
+
+input[type="text"], input[type="number"] {
+    font-family: var(--font-mono);
+    font-size: 14px;
+    padding: 9px 12px;
+    border-radius: 6px;
+    border: 1px solid var(--ink-soft);
+    background: #fff;
+    color: var(--ink);
+    width: 100%;
+}
+input:focus { outline: 2px solid var(--burgundy); outline-offset: 1px; }
+
+label {
+    display: block;
+    font-size: 13px;
+    font-weight: 500;
+    margin-bottom: 6px;
+    color: var(--ink-soft);
+}

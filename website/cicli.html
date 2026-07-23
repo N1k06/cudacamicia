@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>I 15 cicli — Straccia Camicia</title>
+<link rel="stylesheet" href="css/style.css">
+<style>
+    h1.page-title { font-size: 32px; margin: 48px 0 8px; }
+    .page-subtitle { color: var(--cream-dim); max-width: 68ch; margin-bottom: 28px; }
+
+    .graph-frame-wrap {
+        background: var(--paper);
+        border-radius: 12px;
+        overflow: hidden;
+        border: 1px solid var(--paper-dim);
+    }
+    .graph-frame-wrap iframe {
+        display: block;
+        width: 100%;
+        height: 820px;
+        border: none;
+    }
+
+    .breakdown-note { margin-top: 28px; color: var(--cream-dim); font-size: 14px; max-width: 68ch; }
+    .breakdown-note strong { color: var(--brass-bright); }
+</style>
+</head>
+<body>
+
+<header class="site-header">
+    <a href="index.html" class="brand">Straccia Camicia</a>
+    <nav>
+        <a href="index.html">Home</a>
+        <a href="cicli.html" class="active">I 15 cicli</a>
+        <a href="simulatore.html">Simulatore</a>
+        <a href="https://github.com/" target="_blank" rel="noopener">GitHub</a>
+    </nav>
+</header>
+
+<main>
+
+<h1 class="page-title">I 15 cicli</h1>
+<p class="page-subtitle">
+    Delle 162 configurazioni iniziali che portano a una partita infinita,
+    solo 15 sono davvero distinte (verificato con la forma canonica della
+    sequenza di stati — non solo la lunghezza condivisa). Ogni "vortice" qui
+    sotto è un ciclo, disegnato come un vero anello geometrico nell'ordine
+    sequenziale corretto; i raggi che vi confluiscono sono le singole
+    partite. Passa il mouse su un pallino per vedere la configurazione
+    esatta di quello stato e quali mazzi iniziali vi transitano.
+</p>
+
+<div class="graph-frame-wrap">
+    <iframe src="grafo-embed.html" title="Grafo interattivo dei 15 cicli"></iframe>
+</div>
+
+<p class="breakdown-note">
+    Il ciclo più grande, di <strong>546 turni</strong>, raccoglie da solo
+    <strong>90 delle 162</strong> partite infinite trovate — quasi il 55%.
+    Altri due cicli medi (156 e 188 turni) coprono altre 28 e 26 partite. Il
+    resto si divide tra sei coppie e sei cicli raggiunti da un'unica
+    configurazione.
+</p>
+
+</main>
+
+<footer class="site-footer">
+    Progetto di ricerca esaustiva su Straccia Camicia — codice e dati su
+    <a href="https://github.com/" target="_blank" rel="noopener">GitHub</a>.
+</footer>
+
+</body>
+</html>
