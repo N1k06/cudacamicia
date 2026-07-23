@@ -95,6 +95,15 @@
 
 <h1>Cicli e traiettorie — layout radiale (mazzo da 40 carte)</h1>
 <p class="subtitle">
+  A differenza della versione precedente (layout a forza fisica), qui le
+  posizioni sono calcolate esplicitamente: gli stati che appartengono a un
+  ciclo sono disposti su un vero <b style="color:var(--text)">cerchio
+  geometrico</b>, nell'ordine sequenziale corretto — percorrendolo si torna
+  esattamente al punto di partenza. Gli stati transitori (attraversati una
+  sola volta) si irradiano verso l'esterno come raggi, a una distanza
+  proporzionale a quanti passi mancano prima di raggiungere il ciclo. Rami
+  di partite diverse che si fondono nello stesso punto restano sovrapposti
+  da lì in poi, esattamente come nella realtà del gioco.
   <b style="color:var(--text)">Passa il mouse su un pallino</b> per vedere la
   configurazione esatta di quello stato (mano A, mano B, mazzetto, chi ha
   l'iniziativa) e quali rank (mazzi iniziali) vi transitano.
