@@ -168,6 +168,15 @@
 
 <h1>Cicli e traiettorie — layout radiale (mazzo da 40 carte)</h1>
 <p class="subtitle">
+  A differenza della versione precedente (layout a forza fisica), qui le
+  posizioni sono calcolate esplicitamente: gli stati che appartengono a un
+  ciclo sono disposti su un vero <b style="color:var(--text)">cerchio
+  geometrico</b>, nell'ordine sequenziale corretto — percorrendolo si torna
+  esattamente al punto di partenza. Gli stati transitori (attraversati una
+  sola volta) si irradiano verso l'esterno come raggi, a una distanza
+  proporzionale a quanti passi mancano prima di raggiungere il ciclo. Rami
+  di partite diverse che si fondono nello stesso punto restano sovrapposti
+  da lì in poi, esattamente come nella realtà del gioco.
   <b style="color:var(--text)">Passa il mouse su un pallino</b> per vedere la
   configurazione esatta di quello stato (mano A, mano B, mazzetto, chi ha
   l'iniziativa) e quali rank (mazzi iniziali) vi transitano.
@@ -479,10 +488,29 @@ function fitViewToCurrentNodes() {
 // (in pixel-schermo, non in unita' del grafo, cosi' la "tolleranza" e'
 // sempre la stessa a occhio umano, indipendentemente da quanto sei zoomato).
 
-function localCoordsFromEvent(e) {
+// Conversione corretta schermo -> spazio del viewBox: l'SVG di default
+// (preserveAspectRatio="xMidYMid meet", il comportamento standard, mai
+// cambiato in questo file) scala in modo UNIFORME e centra il contenuto,
+// aggiungendo bande vuote sopra/sotto O ai lati se le proporzioni non
+// combaciano -- NON deforma i due assi in modo indipendente. Usare
+// rect.width/vbW e rect.height/vbH come due fattori di scala SEPARATI (come
+// faceva la versione precedente) e' esattamente sbagliato in questo modo:
+// funziona "per caso" se il contenitore ha le stesse proporzioni del
+// viewBox, ma introduce una distorsione asimmetrica tra i due assi non
+// appena le proporzioni divergono -- il caso tipico di un telefono (schermo
+// stretto e alto) contro il nostro viewBox (piu' quadrato o panoramico).
+function clientToSvgCoords(clientX, clientY) {
   const rect = svg.getBoundingClientRect();
-  const svgX = (e.clientX - rect.left) / rect.width * vbW + (minX - pad);
-  const svgY = (e.clientY - rect.top) / rect.height * vbH + (minY - pad);
+  const s = Math.min(rect.width / vbW, rect.height / vbH);
+  const offsetX = (rect.width - vbW * s) / 2;
+  const offsetY = (rect.height - vbH * s) / 2;
+  const svgX = (clientX - rect.left - offsetX) / s + (minX - pad);
+  const svgY = (clientY - rect.top - offsetY) / s + (minY - pad);
+  return { svgX, svgY, s };
+}
+
+function localCoordsFromEvent(e) {
+  const { svgX, svgY } = clientToSvgCoords(e.clientX, e.clientY);
   return { localX: (svgX - panX) / scale, localY: (svgY - panY) / scale };
 }
 
@@ -502,8 +530,8 @@ svg.addEventListener('click', (e) => {
   const { id, dist } = findNearestNode(localX, localY);
   if (id === null) return;
 
-  const rect = svg.getBoundingClientRect();
-  const pixelsPerLocalUnit = scale * (rect.width / vbW);
+  const { s } = clientToSvgCoords(e.clientX, e.clientY);
+  const pixelsPerLocalUnit = scale * s;
   const thresholdLocal = 22 / pixelsPerLocalUnit;  // ~22px sullo schermo, a qualunque zoom
 
   if (dist > thresholdLocal) {
@@ -529,8 +557,7 @@ let isDragging = false, lastX = 0, lastY = 0;
 
 svg.addEventListener('wheel', (e) => {
   e.preventDefault();
-  const rect = svg.getBoundingClientRect();
-  const mx = e.clientX - rect.left, my = e.clientY - rect.top;
+  const { svgX: mx, svgY: my } = clientToSvgCoords(e.clientX, e.clientY);
   const factor = e.deltaY < 0 ? 1.15 : 1 / 1.15;
   const newScale = Math.min(Math.max(scale * factor, 0.1), 30);
   panX = mx - (mx - panX) * (newScale / scale);
@@ -544,8 +571,9 @@ svg.addEventListener('mousedown', (e) => {
 });
 window.addEventListener('mousemove', (e) => {
   if (!isDragging) return;
-  panX += e.clientX - lastX;
-  panY += e.clientY - lastY;
+  const { s } = clientToSvgCoords(e.clientX, e.clientY);
+  panX += (e.clientX - lastX) / s;
+  panY += (e.clientY - lastY) / s;
   lastX = e.clientX; lastY = e.clientY;
   applyTransform();
 });
